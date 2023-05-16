@@ -1,10 +1,10 @@
 <?php
-require_once "controllers/CategoriaController.php";
+require_once "controllers/ProdutoController.php";
 
 if (isset($_GET["id"])) {
-    $categoriaController = new CategoriaController();
-    $categoriaController->delete($_GET["id"]);
+    $produtoController = new ProdutoController();
+    $produtoController->delete($_GET["id"]);
 
     // Voltando pra tela anterior
-    header("Location: ?pg=categorias");
+    header("Location: ?pg=produtos");
 }

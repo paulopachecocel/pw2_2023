@@ -3,6 +3,12 @@ require_once "controllers/ProdutoController.php";
 
 $controller = new ProdutoController();
 $produtos = $controller->findAll();
+
+// Verificar se existe uma mensagem definida na sessão
+if (isset($_SESSION['mensagem'])) {
+    echo "<script>alert('" . $_SESSION['mensagem'] . "')</script>";
+    unset($_SESSION['mensagem']); // Limpar a variável de sessão após exibir o alerta
+}
 ?>
 
 <div class="container mt-5">
@@ -34,6 +40,8 @@ $produtos = $controller->findAll();
                             <td>
                                 <a class="" href="?pg=form_produto&id=<?php echo $produto->getId(); ?>">
                                     <i class="fas fa-eye"></i></a>
+                                <a class="" href="?pg=delete_produto&id=<?php echo $produto->getId(); ?>" onclick="return confirm('Tem certeza que deseja excluir este produto?')">
+                                    <i class="fas fa-trash-alt"></i></a>
                             </td>
                         </tr>
                     <?php endforeach; ?>

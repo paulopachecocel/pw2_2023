@@ -70,20 +70,27 @@ class ProdutoController
             echo "Erro ao atualizar o produto: " . $e->getMessage();
         }
     }
-    public function delete(Produto $produto)
+    public function delete($id)
     {
         try {
             $conexao = Conexao::getInstance();
 
             $stmt = $conexao->prepare("DELETE FROM produto WHERE id = :id");
 
-            $stmt->bindParam(":id", $produto->getId());
+            $stmt->bindParam(":id", $id);
 
             $stmt->execute();
 
-            return $produto;
+            if ($stmt->rowCount() > 0) {
+                $_SESSION['mensagem'] = 'Produto excluída com sucesso!';
+                return true;
+            } else {
+                $_SESSION['mensagem'] = 'A Produto não foi encontrada.';
+                return false;
+            }
         } catch (PDOException $e) {
-            echo "Erro ao excluir o produto: " . $e->getMessage();
+            $_SESSION['mensagem'] = 'Erro ao excluir a Produto: ' . $e->getMessage();
+            return false;
         }
     }
     public function findById($id)
