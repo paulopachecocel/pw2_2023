@@ -1,0 +1,44 @@
+<?php
+require_once "controllers/ProdutoController.php";
+
+$controller = new ProdutoController();
+$produtos = $controller->findAll();
+?>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col">
+            <div class="d-flex justify-content-between mb-3">
+                <h1 class="text-center mb-0">Lista de Produtos</h1>
+                <a href="?pg=form_produto" class="btn btn-success" role="button">Cadastrar</a>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Percentual de Lucro</th>
+                        <th>Categoria</th>
+                        <th>Marca</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($produtos as $produto) : ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($produto->getId()); ?></td>
+                            <td><?php echo htmlspecialchars($produto->getNome()); ?></td>
+                            <td><?php echo number_format($produto->getPercentualLucro(), 2, ',', '.') . '%'; ?></td>
+                            <td><?php echo htmlspecialchars($produto->getCategoria()->getNome()); ?></td>
+                            <td><?php echo htmlspecialchars($produto->getMarca()->getNome()); ?></td>
+                            <td>
+                                <a class="" href="?pg=form_produto&id=<?php echo $produto->getId(); ?>">
+                                    <i class="fas fa-eye"></i></a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
