@@ -1,10 +1,10 @@
 <?php
-require_once "controllers/CategoriaController.php";
+require_once "controllers/MarcaController.php";
 
 if (isset($_GET["id"])) {
-    $categoriaController = new CategoriaController();
-    $categoriaController->delete($_GET["id"]);
+    $marcaController = new MarcaController();
+    $marcaController->delete($_GET["id"]);
 
     // Voltando pra tela anterior
-    header("Location: ?pg=categorias");
+    header("Location: ?pg=marcas");
 }

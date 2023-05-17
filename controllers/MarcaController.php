@@ -36,9 +36,47 @@ class MarcaController
     }
     public function update(Marca $marca)
     {
+        try {
+            $conexao = Conexao::getInstance();
+
+            $stmt = $conexao->prepare("UPDATE marca SET nome = :nome WHERE id = :id");
+
+            $stmt->bindParam(":nome", $marca->getNome());
+            $stmt->bindParam(":id", $marca->getId());
+
+            $stmt->execute();
+
+            return $this->findById($marca->getId());
+        } catch (PDOException $e) {
+            echo "Erro ao atualizar a marca: " . $e->getMessage();
+        }
     }
-    public function delete(Marca $marca)
+    public function delete($id)
     {
+        try {
+            $conexao = Conexao::getInstance();
+
+            // Excluir os produtos relacionados -> Faz o efeito cascata para não dar erro de chave estrangeira
+            $stmtProdutos = $conexao->prepare("DELETE FROM produto WHERE id_marca = :id");
+            $stmtProdutos->bindParam(":id", $id);
+            $stmtProdutos->execute();
+
+            // Excluir a marca
+            $stmtMarca = $conexao->prepare("DELETE FROM marca WHERE id = :id");
+            $stmtMarca->bindParam(":id", $id);
+            $stmtMarca->execute();
+
+            if ($stmtMarca->rowCount() > 0) {
+                $_SESSION['mensagem'] = 'Marca excluída com sucesso!';
+                return true;
+            } else {
+                $_SESSION['mensagem'] = 'A Marca não foi encontrada.';
+                return false;
+            }
+        } catch (PDOException $e) {
+            $_SESSION['mensagem'] = 'Erro ao excluir a Marca: ' . $e->getMessage();
+            return false;
+        }
     }
     public function findById($id)
     {
