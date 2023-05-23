@@ -4,6 +4,11 @@
 			<div class="collapse navbar-collapse" id="navbarNav">
 				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 					<li class="nav-item">
+						<a class="nav-link active" aria-current="page" href="?pg=usuario">Usuario</a>
+					</li>
+				</ul>
+				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+					<li class="nav-item">
 						<a class="nav-link active" aria-current="page" href="?pg=produtos">Produtos</a>
 					</li>
 				</ul>

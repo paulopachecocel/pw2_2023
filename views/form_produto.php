@@ -19,7 +19,7 @@ if (
 	$categoriaController = new CategoriaController;
 	$categoria = $categoriaController->findById($_POST["categoria"]);
 
-	// Recuperando a Categoria
+	// Recuperando a Marca
 	$marcaController = new MarcaController;
 	$marca = $marcaController->findById($_POST["marca"]);
 
