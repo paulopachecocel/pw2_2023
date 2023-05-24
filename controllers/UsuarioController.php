@@ -1,4 +1,5 @@
 <?php
+require_once "Bcrypt.php";
 require_once "models/Conexao.php";
 require_once "models/Usuario.php";
 
@@ -37,7 +38,7 @@ class UsuarioController
 
         $stmt->bindParam(":nome", $usuario->getNome());
         $stmt->bindParam(":login", $usuario->getLogin());
-        $stmt->bindParam(":senha", $usuario->getSenha());
+        $stmt->bindParam(":senha", Bcrypt::hash($usuario->getSenha()));
 
         $stmt->execute();
 
@@ -50,9 +51,14 @@ class UsuarioController
         try {
             $conexao = Conexao::getInstance();
 
-            $stmt = $conexao->prepare("UPDATE usuario SET nome = :nome, login = :login, senha = :senha WHERE id = :id");
+            if($usuario->getSenha()==null){
+                $stmt = $conexao->prepare("UPDATE usuario SET nome = :nome, login = :login WHERE id = :id");
+            } else {
+                $stmt = $conexao->prepare("UPDATE usuario SET nome = :nome, login = :login, senha = :senha WHERE id = :id");
+                $stmt->bindParam(":senha", Bcrypt::hash($usuario->getSenha()));
+            }
 
-            $stmt->bindParam(":senha", $usuario->getSenha());
+            //$stmt->bindParam(":senha", Bcrypt::hash($usuario->getSenha()));
             $stmt->bindParam(":login", $usuario->getLogin());
             $stmt->bindParam(":nome", $usuario->getNome());
             $stmt->bindParam(":id", $usuario->getId());
@@ -99,7 +105,7 @@ class UsuarioController
 
             $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            $usuario = new Usuario($resultado["id"], $resultado["nome"], $resultado["login"], $resultado["senha"]);
+            $usuario = new Usuario($resultado["id"], $resultado["nome"], $resultado["login"], null);
 
             return $usuario;
         } catch (PDOException $e) {
