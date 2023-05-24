@@ -6,5 +6,5 @@ if (isset($_GET["id"])) {
     $usuarioController->delete($_GET["id"]);
 
     // Voltando pra tela anterior
-    header("Location: ?pg=usuarios");
+    header("Location: ?pg=usuario");
 }
