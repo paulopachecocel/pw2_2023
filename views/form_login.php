@@ -8,6 +8,7 @@ require_once "C:/xampp/htdocs/pw2_2023-master/controllers/UsuarioController.php"
         $usuarioController = new UsuarioController();
         $usuarioController->login($_POST["usuario"], $_POST["senha"]);
     }
+	//para limpar a mensagem quando o uauario esta errado depois de mostrar
 	if (isset($_SESSION['mensagem'])) {
 		echo "<script>alert('" . $_SESSION['mensagem'] . "')</script>";
 		unset($_SESSION['mensagem']); // Limpar a variável de sessão após exibir o alerta
