@@ -1,14 +1,49 @@
 <?php
 require_once "Bcrypt.php";
-require_once "models/Conexao.php";
-require_once "models/Usuario.php";
+require_once "C:/xampp/htdocs/pw2_2023-master/models/Conexao.php";
+require_once "C:/xampp/htdocs/pw2_2023-master/models/Usuario.php";
+
 
 
 class UsuarioController
 {
     public function login($login, $senha)
     {
-    }
+        try {
+            $conexao = Conexao::getInstance();
+    
+            $stmt = $conexao->prepare("SELECT * FROM usuario WHERE login = :login");
+    
+            $stmt->bindParam(":login", $login);
+    
+            $stmt->execute();
+    
+            $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+            if ($resultado) {
+
+                $senhaArmazenada = $resultado["senha"];
+
+                if (Bcrypt::check($senha, $senhaArmazenada)) {
+                    // Senha correta, redirecionar para página inicial
+                    header("Location: ../index.php");
+                    return true;
+                } else {
+                    // Usuário não encontrado
+                    $_SESSION['mensagem'] = 'O Usuario não foi encontrado.';
+                    return false;
+                }
+            }else{
+                $_SESSION['mensagem'] = 'O Usuario não foi encontrado.';
+                return false;
+            }
+            
+            } catch (PDOException $e) {
+                echo "Erro ao buscar o usuário: " . $e->getMessage();
+            }
+        }
+    
+
     public function logout()
     {
         session_start();
