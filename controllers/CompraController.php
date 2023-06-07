@@ -27,26 +27,27 @@ class ProdutoController
 
         return $produtos;
     }
-    public function save(Produto $produto)
+    public function save(array $produtos)
     {
-        try {
-            $conexao = Conexao::getInstance();
+        // Insere uma compra
+        $conexao = Conexao::getInstance();
 
-            $stmt = $conexao->prepare("INSERT INTO produto (nome, percentual_lucro, id_categoria, id_marca) VALUES (:nome, :percentual_lucro, :id_categoria, :id_marca)");
+        $stmt = $conexao->prepare("INSERT INTO compra (dt_hora) VALUES (:dt_hora)");
 
-            $stmt->bindParam(":nome", $produto->getNome());
-            $stmt->bindParam(":percentual_lucro", $produto->getPercentualLucro());
-            $stmt->bindParam(":id_categoria", $produto->getCategoria()->getId());
-            $stmt->bindParam(":id_marca", $produto->getMarca()->getId());
+        $stmt->bindParam(":dt_hora", date('Y-m-d H:i:s'));
 
-            $stmt->execute();
+        $stmt->execute();
 
-            $produto->setId($conexao->lastInsertId());
+        $compra = $this->findById($conexao->lastInsertId());
 
-            return $produto;
-        } catch (PDOException $e) {
-            echo "Erro ao inserir o produto: " . $e->getMessage();
-        }
+        // Após salvar a compra, vou salvar os itens relacionando com a compra
+        $produtoCompraController = new ProdutoCompraController();
+        foreach ($produtos as $produtoCompra) :
+            $produtoCompra->setCompra($compra); //Defino a compra pra cada produto
+            $produtoCompraController->save($produtoCompra);
+        endforeach;
+
+        return $compra;
     }
 
     public function update(Produto $produto)
