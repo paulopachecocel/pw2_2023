@@ -1,5 +1,6 @@
 <?php
 require_once "controllers/UsuarioController.php";
+include_once("restrict.php");
 
 $controller = new UsuarioController();
 $usuarios = $controller->findAll();

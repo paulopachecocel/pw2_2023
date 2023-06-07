@@ -1,5 +1,6 @@
 <?php
 require_once "controllers/CategoriaController.php";
+include_once("restrict.php");
 
 if (isset($_GET["id"])) {
     $categoriaController = new CategoriaController();

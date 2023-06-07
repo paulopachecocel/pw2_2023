@@ -1,4 +1,5 @@
 <?php
+include_once("restrict.php");
     session_start();
     
     unset($_SESSION["usuario"]);

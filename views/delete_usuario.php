@@ -1,5 +1,6 @@
 <?php
 require_once "controllers/UsuarioController.php";
+include_once("restrict.php");
 
 if (isset($_GET["id"])) {
     $usuarioController = new UsuarioController();

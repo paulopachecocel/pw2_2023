@@ -1,5 +1,6 @@
 <?php
 require_once "controllers/CategoriaController.php";
+include_once("restrict.php");
 
 $controller = new CategoriaController();
 $categorias = $controller->findAll();

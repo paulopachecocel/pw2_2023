@@ -1,5 +1,6 @@
 <?php
 require_once "controllers/MarcaController.php";
+include_once("restrict.php");
 
 if (isset($_GET["id"])) {
     $marcaController = new MarcaController();
