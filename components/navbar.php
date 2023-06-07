@@ -24,7 +24,7 @@
 				</ul>
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
-                        <?php if(isset($_SESSION["usuario"])) { echo "<p class='p-2'>Seja bem vindo <b>". $_SESSION["usuario"] . " " . $_SESSION["pass"] . "</b> </p>"; ?>
+                        <?php if(isset($_SESSION["nome_usuario"])) { echo "<p class='p-2'>Seja bem vindo <b>". $_SESSION["nome_usuario"] . "</b> </p>"; ?>
 
                             <li class="nav-item">
                                 <a class="nav-link" href="?pg=logout">Sair</a>

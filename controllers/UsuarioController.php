@@ -25,6 +25,9 @@ class UsuarioController
                 $senhaArmazenada = $resultado["senha"];
 
                 if (Bcrypt::check($senha, $senhaArmazenada)) {
+                    $_SESSION["id_usuario"]=$resultado["id"];
+                    $_SESSION["nome_usuario"]=$resultado["nome"];
+                    $_SESSION["login_usuario"]=$resultado["login"];
                     // Senha correta, redirecionar para página inicial
                     header("Location: ../index.php");
                     return true;
