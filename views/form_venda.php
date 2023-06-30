@@ -95,7 +95,7 @@ $produtosVenda = $produtoVendaController->findAll($_SESSION["venda_id"]);
 						<th>#</th>
 						<th>Produto</th>
 						<th>Qtde</th>
-						<th>Preço de Custo</th>
+						<th>Valor Unitario</th>
 						<th>Ações</th>
 					</tr>
 				</thead>
