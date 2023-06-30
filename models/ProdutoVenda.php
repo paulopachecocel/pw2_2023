@@ -1,4 +1,4 @@
-<?php
+                                     <?php
 require_once "models\Produto.php";
 require_once "models\Venda.php";
 

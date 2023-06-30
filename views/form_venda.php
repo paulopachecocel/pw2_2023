@@ -5,6 +5,8 @@ require_once "controllers/ProdutoController.php";
 require_once "controllers/ProdutoVendaController.php";
 require_once "models/ProdutoVenda.php";
 require_once "models/Produto.php";
+require_once "models/Venda.php";
+require_once "models/Usuario.php";
 
 
 if (isset($_POST["finalizarVenda"])) {
@@ -31,10 +33,11 @@ if (isset($_POST['adicionarProduto'])) {
 	$produto = $produtoController->findById($_POST['produto']);
 	$venda = $vendaController->findById($_SESSION["venda_id"]);
 	$quantidade = $_POST['qtde'];
-	$valorUnitario = $_POST['preco_custo'];
+	$valorUnitario = $_POST['valor_unitario'];
+	$valorTotal = $quantidade * $valorUnitario;
 
 	// Criar uma nova instância de ProdutoVenda
-	$produtoVenda = new ProdutoVenda(null, $valorUnitario, $quantidade, $produto, $venda, $usuario);
+	$produtoVenda = new ProdutoVenda(null, $usuario, $produto, $venda, $quantidade, $valorUnitario, $valorTotal);
 
 	$produtoVendaController->save($produtoVenda);
 }
@@ -69,8 +72,8 @@ $produtosVenda = $produtoVendaController->findAll($_SESSION["venda_id"]);
 			</div>
 
 			<div class="form-group col-md-3">
-				<label for="preco_custo">Preço de Custo</label>
-				<input type="text" class="form-control" id="preco_custo" name="preco_custo" required>
+				<label for="valor_unitario">Preço de Custo</label>
+				<input type="text" class="form-control" id="valor_unitario" name="valor_unitario" required>
 			</div>
 			<div class="form-group col-md-3 align-self-end">
 				<input type="submit" class="btn btn-primary" id="salvar" name="adicionarProduto" value="Adicionar Produto">
@@ -105,7 +108,7 @@ $produtosVenda = $produtoVendaController->findAll($_SESSION["venda_id"]);
 							<td><?php echo htmlspecialchars($produtoVenda->getProduto()->getNome()); ?></td>
 							<td><?php echo htmlspecialchars($produtoVenda->getProduto()->getNome()); ?></td>
 							<td><?php echo number_format($produtoVenda->getQtde(), 2, ',', '.'); ?></td>
-							<td><?php echo "R\$ " . number_format($produtoVenda->getPrecoCusto(), 2, ',', '.'); ?></td>
+							<td><?php echo "R\$ " . number_format($produtoVenda->getValorUnitario(), 2, ',', '.'); ?></td>
 							<td>
 								<a class="" href="?pg=delete_produto_venda&id=<?php echo $produtoVenda->getId(); ?>" onclick="return confirm('Tem certeza que deseja excluir este produto?')">
 									<i class="fas fa-trash-alt"></i></a>
