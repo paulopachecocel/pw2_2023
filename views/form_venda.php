@@ -1,52 +1,52 @@
 <?php
 include_once("restrict.php");
-require_once "controllers/CompraController.php";
+require_once "controllers/VendaController.php";
 require_once "controllers/ProdutoController.php";
-require_once "controllers/ProdutoCompraController.php";
-require_once "models/ProdutoCompra.php";
+require_once "controllers/ProdutoVendaController.php";
+require_once "models/ProdutoVenda.php";
 require_once "models/Produto.php";
 
 
-if (isset($_POST["finalizarCompra"])) {
-	unset($_SESSION["compra_id"]);
-	header("Location: ?pg=compras");
+if (isset($_POST["finalizarVenda"])) {
+	unset($_SESSION["venda_id"]);
+	header("Location: ?pg=vendas");
 	exit();
 }
 
-if (!isset($_SESSION['compra_id'])) {
-	$compraController = new CompraController();
-	$compra = new Compra(null, null);
-	$compra = $compraController->save();
-	$_SESSION['compra_id'] = $compra->getId();
+if (!isset($_SESSION['venda_id'])) {
+	$vendaController = new VendaController();
+	$venda = new Venda(null, null);
+	$venda = $vendaController->save();
+	$_SESSION['venda_id'] = $venda->getId();
 }
 
-$produtoCompraController = new ProdutoCompraController();
+$produtoVendaController = new ProdutoVendaController();
 
 if (isset($_POST['adicionarProduto'])) {
 	$produtoController = new ProdutoController();
-	$compraController = new CompraController();
+	$vendaController = new VendaController();
 	$usuarioController = new UsuarioController();
 	// Dados do formulário
 	$usuario = $usuarioController->findById($_SESSION['id_usuario']);
 	$produto = $produtoController->findById($_POST['produto']);
-	$compra = $compraController->findById($_SESSION["compra_id"]);
+	$venda = $vendaController->findById($_SESSION["venda_id"]);
 	$quantidade = $_POST['qtde'];
 	$precoCusto = $_POST['preco_custo'];
 
-	// Criar uma nova instância de ProdutoCompra
-	$produtoCompra = new ProdutoCompra(null, $precoCusto, $quantidade, $produto, $compra, $usuario);
+	// Criar uma nova instância de ProdutoVenda
+	$produtoVenda = new ProdutoVenda(null, $precoCusto, $quantidade, $produto, $venda, $usuario);
 
-	$produtoCompraController->save($produtoCompra);
+	$produtoVendaController->save($produtoVenda);
 }
 
-$produtosCompra = $produtoCompraController->findAll($_SESSION["compra_id"]);
+$produtosVenda = $produtoVendaController->findAll($_SESSION["venda_id"]);
 
 ?>
 
 
 
 <div class="container mt-2">
-	<h1 class="text-center mb-0">Cadastro de Compra</h1>
+	<h1 class="text-center mb-0">Cadastro de Venda</h1>
 	<br>
 	<form method="POST">
 		<div class="form-row">
@@ -79,7 +79,7 @@ $produtosCompra = $produtoCompraController->findAll($_SESSION["compra_id"]);
 		</div>
 	</form>
 	<form method="POST">
-		<input type="submit" class="btn btn-success" id="finalizar" name="finalizarCompra" value="Finalizar Compra">
+		<input type="submit" class="btn btn-success" id="finalizar" name="finalizarVenda" value="Finalizar Venda">
 	</form>
 </div>
 
@@ -100,14 +100,14 @@ $produtosCompra = $produtoCompraController->findAll($_SESSION["compra_id"]);
 					</tr>
 				</thead>
 				<tbody>
-					<?php foreach ($produtosCompra as $key => $produtoCompra) : ?>
+					<?php foreach ($produtosVenda as $key => $produtoVenda) : ?>
 						<tr>
-							<td><?php echo htmlspecialchars($produtoCompra->getProduto()->getNome()); ?></td>
-							<td><?php echo htmlspecialchars($produtoCompra->getProduto()->getNome()); ?></td>
-							<td><?php echo number_format($produtoCompra->getQtde(), 2, ',', '.'); ?></td>
-							<td><?php echo "R\$ " . number_format($produtoCompra->getPrecoCusto(), 2, ',', '.'); ?></td>
+							<td><?php echo htmlspecialchars($produtoVenda->getProduto()->getNome()); ?></td>
+							<td><?php echo htmlspecialchars($produtoVenda->getProduto()->getNome()); ?></td>
+							<td><?php echo number_format($produtoVenda->getQtde(), 2, ',', '.'); ?></td>
+							<td><?php echo "R\$ " . number_format($produtoVenda->getPrecoCusto(), 2, ',', '.'); ?></td>
 							<td>
-								<a class="" href="?pg=delete_produto_compra&id=<?php echo $produtoCompra->getId(); ?>" onclick="return confirm('Tem certeza que deseja excluir este produto?')">
+								<a class="" href="?pg=delete_produto_venda&id=<?php echo $produtoVenda->getId(); ?>" onclick="return confirm('Tem certeza que deseja excluir este produto?')">
 									<i class="fas fa-trash-alt"></i></a>
 							</td>
 						</tr>

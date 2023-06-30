@@ -1,9 +1,9 @@
 <?php
 include_once("restrict.php");
-require_once "controllers/CompraController.php";
+require_once "controllers/VendaController.php";
 
-$controller = new CompraController();
-$compras = $controller->findAll();
+$controller = new VendaController();
+$vendas = $controller->findAll();
 
 // Verificar se existe uma mensagem definida na sessão
 if (isset($_SESSION['mensagem'])) {
@@ -16,8 +16,8 @@ if (isset($_SESSION['mensagem'])) {
     <div class="row">
         <div class="col">
             <div class="d-flex justify-content-between mb-3">
-                <h1 class="text-center mb-0">Lista de Compras</h1>
-                <a href="?pg=form_compra" class="btn btn-success" role="button">Cadastrar</a>
+                <h1 class="text-center mb-0">Lista de Vendas</h1>
+                <a href="?pg=form_venda" class="btn btn-success" role="button">Cadastrar</a>
             </div>
             <table class="table">
                 <thead>
@@ -28,14 +28,14 @@ if (isset($_SESSION['mensagem'])) {
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($compras as $compra) : ?>
+                    <?php foreach ($vendas as $venda) : ?>
                         <tr>
-                            <td><?php echo htmlspecialchars($compra->getId()); ?></td>
-                            <td><?php echo htmlspecialchars($compra->getDataHora()); ?></td>
+                            <td><?php echo htmlspecialchars($venda->getId()); ?></td>
+                            <td><?php echo htmlspecialchars($venda->getDataHora()); ?></td>
                             <td>
-                                <a class="" href="?pg=form_compra&id=<?php echo $compra->getId(); ?>">
+                                <a class="" href="?pg=form_venda&id=<?php echo $venda->getId(); ?>">
                                     <i class="fas fa-eye"></i></a>
-                                <a class="" href="?pg=delete_compra&id=<?php echo $compra->getId(); ?>" onclick="return confirm('Tem certeza que deseja excluir esta compra?')">
+                                <a class="" href="?pg=delete_venda&id=<?php echo $venda->getId(); ?>" onclick="return confirm('Tem certeza que deseja excluir esta venda?')">
                                     <i class="fas fa-trash-alt"></i></a>
                             </td>
                         </tr>

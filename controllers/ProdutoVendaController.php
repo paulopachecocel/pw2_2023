@@ -1,81 +1,81 @@
 <?php
 
 require_once "controllers/UsuarioController.php";
-require_once "models/ProdutoCompra.php";
+require_once "models/ProdutoVenda.php";
 require_once "models/Conexao.php";
 
-class ProdutoCompraController
+class ProdutoVendaController
 {
-    public function findAll($id_compra)
+    public function findAll($id_venda)
     {
 
         $conexao = Conexao::getInstance();
 
-        $stmt = $conexao->prepare("SELECT * FROM produto_compra where id_compra = :id_compra");
+        $stmt = $conexao->prepare("SELECT * FROM produto_venda where id_venda = :id_venda");
 
-        $stmt->bindParam(":id_compra", $id_compra);
+        $stmt->bindParam(":id_venda", $id_venda);
 
         $stmt->execute();
-        $produtoCompras = array();
+        $produtoVendas = array();
 
         $produtoController = new ProdutoController();
         $usuarioController = new UsuarioController();
-        $compraController = new CompraController();
+        $vendaController = new VendaController();
         $usuario =
             $usuarioController->findById($_SESSION["id_usuario"]);
 
-        while ($produtoCompra = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $produto = $produtoController->findById($produtoCompra["id_produto"]);
-            $compra = $compraController->findById($produtoCompra["id_compra"]);
-            $produtoCompra = new ProdutoCompra($produtoCompra["id"], $produtoCompra["preco_custo"], $produtoCompra["qtde"], $produto, $compra, $usuario);
-            $produtoCompras[] = $produtoCompra;
+        while ($produtoVenda = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $produto = $produtoController->findById($produtoVenda["id_produto"]);
+            $venda = $vendaController->findById($produtoVenda["id_venda"]);
+            $produtoVenda = new ProdutoVenda($produtoVenda["id"], $produtoVenda["preco_custo"], $produtoVenda["qtde"], $produto, $venda, $usuario);
+            $produtoVendas[] = $produtoVenda;
         }
 
-        return $produtoCompras;
+        return $produtoVendas;
     }
-    public function save(ProdutoCompra $produtoCompra)
+    public function save(ProdutoVenda $produtoVenda)
     {
-        // Insere uma produtoCompra
+        // Insere uma produtoVenda
         $conexao = Conexao::getInstance();
 
-        $stmt = $conexao->prepare("INSERT INTO produto_compra (id_usuario, id_produto, id_compra, qtde, preco_custo) VALUES (:id_usuario, :id_produto, :id_compra, :qtde, :preco_custo)");
+        $stmt = $conexao->prepare("INSERT INTO produto_venda (id_usuario, id_produto, id_venda, qtde, preco_custo) VALUES (:id_usuario, :id_produto, :id_venda, :qtde, :preco_custo)");
         $id_usuario = $_SESSION["id_usuario"];
         $id_produto =
-            $produtoCompra->getProduto()->getId();
-        $id_compra = $produtoCompra->getCompra()->getId();
-        $qtde = $produtoCompra->getQtde();
-        $preco_custo = $produtoCompra->getPrecoCusto();
+            $produtoVenda->getProduto()->getId();
+        $id_venda = $produtoVenda->getVenda()->getId();
+        $qtde = $produtoVenda->getQtde();
+        $preco_custo = $produtoVenda->getPrecoCusto();
         $stmt->bindParam(":id_usuario", $id_usuario);
         $stmt->bindParam(":id_produto", $id_produto);
-        $stmt->bindParam(":id_compra", $id_compra);
+        $stmt->bindParam(":id_venda", $id_venda);
         $stmt->bindParam(":qtde", $qtde);
         $stmt->bindParam(":preco_custo", $preco_custo);
 
         $stmt->execute();
 
-        $produtoCompra = $this->findById($conexao->lastInsertId());
+        $produtoVenda = $this->findById($conexao->lastInsertId());
 
-        // Após salvar a produtoCompra, vou salvar os itens relacionando com a produtoCompra
+        // Após salvar a produtoVenda, vou salvar os itens relacionando com a produtoVenda
 
 
-        return $produtoCompra;
+        return $produtoVenda;
     }
 
-    public function update(ProdutoCompra $produtoCompra)
+    public function update(ProdutoVenda $produtoVenda)
     {
         try {
             $conexao = Conexao::getInstance();
 
-            $stmt = $conexao->prepare("UPDATE produto_compra SET nome = :nome WHERE id = :id");
+            $stmt = $conexao->prepare("UPDATE produto_venda SET nome = :nome WHERE id = :id");
 
-            // $stmt->bindParam(":nome", $produtoCompra->getNome());
-            $stmt->bindParam(":id", $produtoCompra->getId());
+            // $stmt->bindParam(":nome", $produtoVenda->getNome());
+            $stmt->bindParam(":id", $produtoVenda->getId());
 
             $stmt->execute();
 
-            return $this->findById($produtoCompra->getId());
+            return $this->findById($produtoVenda->getId());
         } catch (PDOException $e) {
-            echo "Erro ao atualizar o produtoCompra: " . $e->getMessage();
+            echo "Erro ao atualizar o produtoVenda: " . $e->getMessage();
         }
     }
     public function delete($id)
@@ -83,12 +83,12 @@ class ProdutoCompraController
         try {
             $conexao = Conexao::getInstance();
 
-            // Excluir o produtoCompra
-            $stmtProdutoCompra = $conexao->prepare("DELETE FROM produto_compra WHERE id = :id");
-            $stmtProdutoCompra->bindParam(":id", $id);
-            $stmtProdutoCompra->execute();
+            // Excluir o produtoVenda
+            $stmtProdutoVenda = $conexao->prepare("DELETE FROM produto_venda WHERE id = :id");
+            $stmtProdutoVenda->bindParam(":id", $id);
+            $stmtProdutoVenda->execute();
 
-            if ($stmtProdutoCompra->rowCount() > 0) {
+            if ($stmtProdutoVenda->rowCount() > 0) {
                 $_SESSION['mensagem'] = 'Produto excluído com sucesso!';
                 return true;
             } else {
@@ -105,7 +105,7 @@ class ProdutoCompraController
         try {
             $conexao = Conexao::getInstance();
 
-            $stmt = $conexao->prepare("SELECT * FROM produto_compra WHERE id = :id");
+            $stmt = $conexao->prepare("SELECT * FROM produto_venda WHERE id = :id");
 
             $stmt->bindParam(":id", $id);
 
@@ -115,18 +115,18 @@ class ProdutoCompraController
 
             $produtoController = new ProdutoController();
             $usuarioController = new UsuarioController();
-            $compraController = new CompraController();
+            $vendaController = new VendaController();
 
             $usuario = $usuarioController->findById($resultado["id_usuario"]);
             $produto = $produtoController->findById($resultado["id_produto"]);
-            $compra = $compraController->findById($resultado["id_compra"]);
+            $venda = $vendaController->findById($resultado["id_venda"]);
 
-            $produtoCompra = new ProdutoCompra($resultado["id"], $resultado["preco_custo"], $resultado["qtde"], $produto, $compra, $usuario);
+            $produtoVenda = new ProdutoVenda($resultado["id"], $resultado["preco_custo"], $resultado["qtde"], $produto, $venda, $usuario);
 
 
-            return $produtoCompra;
+            return $produtoVenda;
         } catch (PDOException $e) {
-            echo "Erro ao buscar a produtoCompra: " . $e->getMessage();
+            echo "Erro ao buscar a produtoVenda: " . $e->getMessage();
         }
     }
 }

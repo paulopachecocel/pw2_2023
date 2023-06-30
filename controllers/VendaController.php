@@ -1,64 +1,64 @@
 <?php
-require_once "models/Compra.php";
+require_once "models/Venda.php";
 require_once "models/Conexao.php";
 
-class CompraController
+class VendaController
 {
     public function findAll()
     {
 
         $conexao = Conexao::getInstance();
 
-        $stmt = $conexao->prepare("SELECT * FROM compra");
+        $stmt = $conexao->prepare("SELECT * FROM venda");
 
         $stmt->execute();
-        $compras = array();
+        $vendas = array();
 
-        while ($compra = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $compras[] = new Compra($compra["id"], $compra["dt_hora"]);
+        while ($venda = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $vendas[] = new Venda($venda["id"], $venda["dt_hora"]);
         }
 
-        return $compras;
+        return $vendas;
     }
     public function save()
     {
-        // Insere uma compra
+        // Insere uma venda
         $conexao = Conexao::getInstance();
 
-        $stmt = $conexao->prepare("INSERT INTO compra (dt_hora) VALUES (:dt_hora)");
+        $stmt = $conexao->prepare("INSERT INTO venda (dt_hora) VALUES (:dt_hora)");
 
         $data_atual = date('Y-m-d H:i:s');
         $stmt->bindParam(":dt_hora", $data_atual);
 
         $stmt->execute();
 
-        $compra = $this->findById($conexao->lastInsertId());
+        $venda = $this->findById($conexao->lastInsertId());
 
-        // // Após salvar a compra, vou salvar os itens relacionando com a compra
-        // $produtoCompraController = new ProdutoCompraController();
-        // foreach ($produtos as $produtoCompra) :
-        //     $produtoCompra->setCompra($compra); //Defino a compra pra cada produto
-        //     $produtoCompraController->save($produtoCompra);
+        // // Após salvar a venda, vou salvar os itens relacionando com a venda
+        // $produtoVendaController = new ProdutoVendaController();
+        // foreach ($produtos as $produtoVenda) :
+        //     $produtoVenda->setVenda($venda); //Defino a venda pra cada produto
+        //     $produtoVendaController->save($produtoVenda);
         // endforeach;
 
-        return $compra;
+        return $venda;
     }
 
-    public function update(Compra $compra)
+    public function update(Venda $venda)
     {
         try {
             $conexao = Conexao::getInstance();
 
-            $stmt = $conexao->prepare("UPDATE compra SET nome = :nome WHERE id = :id");
+            $stmt = $conexao->prepare("UPDATE venda SET nome = :nome WHERE id = :id");
 
-            // $stmt->bindParam(":nome", $compra->getNome());
-            $stmt->bindParam(":id", $compra->getId());
+            // $stmt->bindParam(":nome", $venda->getNome());
+            $stmt->bindParam(":id", $venda->getId());
 
             $stmt->execute();
 
-            return $this->findById($compra->getId());
+            return $this->findById($venda->getId());
         } catch (PDOException $e) {
-            echo "Erro ao atualizar o compra: " . $e->getMessage();
+            echo "Erro ao atualizar o venda: " . $e->getMessage();
         }
     }
     public function delete($id)
@@ -67,24 +67,24 @@ class CompraController
             $conexao = Conexao::getInstance();
 
             // Excluir os produtos relacionados -> Faz o efeito cascata para não dar erro de chave estrangeira
-            $stmtProdutos = $conexao->prepare("SELECT * FROM produto WHERE id_compra = :id");
+            $stmtProdutos = $conexao->prepare("SELECT * FROM produto WHERE id_venda = :id");
             $stmtProdutos->bindParam(":id", $id);
             $stmtProdutos->execute();
 
-            // Excluir a compra
-            $stmtCompra = $conexao->prepare("DELETE FROM compra WHERE id = :id");
-            $stmtCompra->bindParam(":id", $id);
-            $stmtCompra->execute();
+            // Excluir a venda
+            $stmtVenda = $conexao->prepare("DELETE FROM venda WHERE id = :id");
+            $stmtVenda->bindParam(":id", $id);
+            $stmtVenda->execute();
 
-            if ($stmtCompra->rowCount() > 0) {
-                $_SESSION['mensagem'] = 'Compra excluída com sucesso!';
+            if ($stmtVenda->rowCount() > 0) {
+                $_SESSION['mensagem'] = 'Venda excluída com sucesso!';
                 return true;
             } else {
-                $_SESSION['mensagem'] = 'A compra não foi encontrada.';
+                $_SESSION['mensagem'] = 'A venda não foi encontrada.';
                 return false;
             }
         } catch (PDOException $e) {
-            $_SESSION['mensagem'] = 'Erro ao excluir a compra: ' . $e->getMessage();
+            $_SESSION['mensagem'] = 'Erro ao excluir a venda: ' . $e->getMessage();
             return false;
         }
     }
@@ -93,7 +93,7 @@ class CompraController
         try {
             $conexao = Conexao::getInstance();
 
-            $stmt = $conexao->prepare("SELECT * FROM compra WHERE id = :id");
+            $stmt = $conexao->prepare("SELECT * FROM venda WHERE id = :id");
 
             $stmt->bindParam(":id", $id);
 
@@ -101,12 +101,12 @@ class CompraController
 
             $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            $compra = new Compra($resultado["id"], $resultado["dt_hora"]);
+            $venda = new Venda($resultado["id"], $resultado["dt_hora"]);
 
 
-            return $compra;
+            return $venda;
         } catch (PDOException $e) {
-            echo "Erro ao buscar a compra: " . $e->getMessage();
+            echo "Erro ao buscar a venda: " . $e->getMessage();
         }
     }
 }
