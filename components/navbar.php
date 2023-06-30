@@ -28,7 +28,7 @@
 				</ul>
 				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 					<li class="nav-item">
-						<a class="nav-link active" aria-current="page" href="?pg=compras">Vendas</a>
+						<a class="nav-link active" aria-current="page" href="?pg=vendas">Vendas</a>
 					</li>
 				</ul>
 				<div class="collapse navbar-collapse justify-content-end" id="navbarNav">

@@ -6,28 +6,27 @@ class ProdutoVenda
 {
     private $id;
 
-    private $usuario;
-
-    private $produto;
-
-    private $venda;
-    
     private $qtde;
-    
+
     private $valor_unitario;
 
     private $valor_total;
 
-    public function __construct($id, Usuario $usuario, Produto $produto, Venda $venda, $qtde, $valor_unitario, $valor_total)
+    private $produto;
+
+    private $venda;
+
+    public function __construct($id, $qtde, Produto $produto, Venda $venda, $valor_unitario, $valor_total)
     {
         $this->id = $id;
-        $this->usuario = $usuario;
-        $this->produto = $produto;
-        $this->venda = $venda;
-        $this->qtde = $qtde;
         $this->valor_unitario = $valor_unitario;
         $this->valor_total = $valor_total;
+        $this->qtde = $qtde;
+        $this->produto = $produto;
+        $this->venda = $venda;
     }
+
+
 
     /**
      * Get the value of id
@@ -45,26 +44,6 @@ class ProdutoVenda
     public function setId($id)
     {
         $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of usuario
-     */
-    public function getUsuario()
-    {
-        return $this->usuario;
-    }
-
-    /**
-     * Set the value of usuario
-     *
-     * @return  self
-     */
-    public function setUsuario(Usuario $usuario)
-    {
-        $this->usuario = $usuario;
 
         return $this;
     }
@@ -110,6 +89,26 @@ class ProdutoVenda
     }
 
     /**
+     * Get the value of valor_unitario
+     */
+    public function getPrecoUnitario()
+    {
+        return $this->valor_unitario;
+    }
+
+    /**
+     * Set the value of valor_unitario
+     *
+     * @return  self
+     */
+    public function setPrecoUnitario($valor_unitario)
+    {
+        $this->valor_unitario = $valor_unitario;
+
+        return $this;
+    }
+
+    /**
      * Get the value of qtde
      */
     public function getQtde()
@@ -128,28 +127,6 @@ class ProdutoVenda
 
         return $this;
     }
-    
-    /**
-     * Get the value of valor_unitario
-     */
-    public function getValorUnitario()
-    {
-        return $this->valor_unitario;
-    }
-
-    /**
-     * Set the value of valor_unitario
-     *
-     * @return  self
-     */
-    public function setValorUnitario($valor_unitario)
-    {
-        $this->valor_unitario = $valor_unitario;
-
-        return $this;
-    }
-
-    
 
     /**
      * Get the value of valor_total

@@ -31,10 +31,10 @@ if (isset($_POST['adicionarProduto'])) {
 	$produto = $produtoController->findById($_POST['produto']);
 	$venda = $vendaController->findById($_SESSION["venda_id"]);
 	$quantidade = $_POST['qtde'];
-	$precoCusto = $_POST['preco_custo'];
+	$valorUnitario = $_POST['preco_custo'];
 
 	// Criar uma nova instância de ProdutoVenda
-	$produtoVenda = new ProdutoVenda(null, $precoCusto, $quantidade, $produto, $venda, $usuario);
+	$produtoVenda = new ProdutoVenda(null, $valorUnitario, $quantidade, $produto, $venda, $usuario);
 
 	$produtoVendaController->save($produtoVenda);
 }
