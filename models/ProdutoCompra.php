@@ -5,10 +5,15 @@ require_once "models\Compra.php";
 class ProdutoCompra
 {
     private $id;
+
     private $preco_custo;
+
     private $qtde;
+
     private $produto;
+
     private $compra;
+
     private $usuario;
 
     public function __construct($id, $preco_custo, $qtde, Produto $produto, Compra $compra, Usuario $usuario)
@@ -18,7 +23,7 @@ class ProdutoCompra
         $this->qtde = $qtde;
         $this->produto = $produto;
         $this->compra = $compra;
-        $this->usuario= $usuario;
+        $this->usuario = $usuario;
     }
 
 
@@ -123,10 +128,10 @@ class ProdutoCompra
         return $this;
     }
 
-   /**
+    /**
      * Get the value of usuario
      */
-    public function getUsuario()
+    public function getUsuairo()
     {
         return $this->usuario;
     }
@@ -136,12 +141,10 @@ class ProdutoCompra
      *
      * @return  self
      */
-    public function setUsuario(Usuario $usuario)
+    public function setUsuairo(Usuario $usuario)
     {
         $this->usuario = $usuario;
 
         return $this;
     }
-
-
 }
